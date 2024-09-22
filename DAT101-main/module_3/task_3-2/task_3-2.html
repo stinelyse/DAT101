@@ -10,8 +10,25 @@
       <span id="txtOut" style="white-space: nowrap"></span>
     </div>
     <ol>
-      <li>[Write the question here, and copy this for more questions]</li>
-      <p>[Write your answer here, and copy this for more answers]</p>
+      <li>In part 1, is it possible to solve the problem using a single "for" loop?</li>
+      <p>Yes it is possible, but then we need to use example 11-i in the same line. </p>
+
+      <li> In part 2, can we create what is known as an "infinite" loop within the condition of the "while" loop?
+        Describe what would or would not be necessary to achieve this. Provide a thorough explanation of
+        your answer.</li>
+        <p>Yes, we can create an infinite loop within the condition of the while loop. A infinite loop occurs when the loops condition is always true. To achieve an infinityloop
+          the condition needs to always be true. We can also not update the condition. If we also dont use a break statment, the loop will not stop until example the program is closed.
+        </p>
+        <li>Discuss briefly how quickly or slowly a computer might be able to compute this, considering the
+          number of guesses and the time it takes. How does the program behave while it is guessing? Can
+          the program perform other tasks concurrently?</li>
+          <p>Computers perform simple operations like generating random numbers and checking conditions very quickly. For a small range like 1 to 60, 
+            the correct number is usually found almost right away, we talk about millisecs. The computer only performs one task at a time.</p>
+            <li>Explain the relationship between rows and columns in nested "for" loops. Can we, for instance,
+              change the order, considering rows to be innermost or columns to be innermost, or does this not
+              matter?</li>
+              <p>In nested for loops, we usually think of the outer loop as representing rows and the inner loop as representing columns. The order of these loops is important because it changes how we access and process the elements. 
+                However, as long as we adjust our logic to match the order, the overall functionality will still work correctly. </p>
     </ol>
     <script type="module" src="./task_3-2.mjs" defer></script>
   </body>
