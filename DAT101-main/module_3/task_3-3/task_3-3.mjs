@@ -3,13 +3,43 @@ import { initPrintOut, printOut, newLine } from "../../common/script/utils.mjs";
 initPrintOut(document.getElementById("txtOut"));
 
 printOut("--- Part 1 ----------------------------------------------------------------------------------------------");
-/* Put your code below here!*/
-printOut("Replace this with you answer!");
+function printTodaysdate() {
+let today = new Date();
+
+let date1 = today.toLocaleDateString('no-NB',{
+weekday: "long",
+year: "numeric",
+month: "long",
+day: "numeric"
+} );
+
+printOut(date1);
+}
+
+printTodaysdate();
 printOut(newLine);
 
 printOut("--- Part 2 ----------------------------------------------------------------------------------------------");
-/* Put your code below here!*/
-printOut("Replace this with you answer!");
+function showDateAndCountdown() {
+   
+    let today = new Date();
+    
+    
+    let releaseDate = new Date('2025-05-14');
+    
+    let daysLeft = Math.ceil((releaseDate - today) / (24 * 60 * 60 * 1000));
+    
+    let norwegianDate = today.toLocaleDateString('no-NB', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    
+   printOut("Dagens dato: " + norwegianDate);
+   printOut("Bare " + daysLeft + "dager igjen til den episke lanseringen av 2XKO!");
+}
+showDateAndCountdown();
 printOut(newLine);
 
 printOut("--- Part 3 ----------------------------------------------------------------------------------------------");
