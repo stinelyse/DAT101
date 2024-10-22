@@ -22,35 +22,34 @@ printOut(newLine);
 printOut("--- Part 2 ----------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
 const rightNumber = 45;
-let number = Math.floor(Math.random() * 60) + 1;
+let number = 0;
 
-while (number !== rightNumber) {
-   number = Math.floor(Math.random() * 60) + 1;
-}
-printOut("Number is " + number.toString());
-printOut(newLine);
+ while(rightNumber !== number){
+number = Math.ceil(Math.random() * 60);
+ }
+
+ printOut("Number is " + number.toString());
+ printOut(newLine);
+
 
 printOut("--- Part 3 ----------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
-let number1= Math.floor(Math.random() * 1000000) + 1;
-let rightNumber1 = 456;
-let guessCount = 1;
+number = 0;
+let guesses = 0;
+const startTime = Date.now();
 
-let startTime= Date.now();
-
-while (number1 !== rightNumber1) {
-    number1 = Math.floor(Math.random() * 1000000) + 1;
-    guessCount++;
+while(rightNumber !== number){
+number = Math.ceil(Math.random() * 1000000);
+guesses++;
 }
+const endTime = Date.now();
+const timeTaken = endTime - startTime;
 
-let endTime = Date.now();
-
-let timeTaken = endTime - startTime;
-
-printOut("The number is: " + number1.toString());
-printOut("Guesses: " + guessCount.toString());
+printOut("The number is: " + number.toString());
+printOut("Guesses: " + guesses.toString());
 printOut("Time taken in millisec: " + timeTaken.toString());
 printOut(newLine);
+
 
 printOut("--- Part 4 ----------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
@@ -109,129 +108,55 @@ for (let i = 0; i < 5; i++) {
 printOut(newLine);
 
 printOut("--- Part 7 ----------------------------------------------------------------------------------------------");
-let attempts = 0;
+printOut("--- Part 7 ----------------------------------------------------------------------------------------------");
+let throwCount = 0;
+let fullStraight = false;
+let threePairs = false;
+let tower = false;
+let yahtzee = false;
 
-let FullStraight = false;
+while (!fullStraight || !threePairs || !tower || !yahtzee) {
+    throwCount++;
 
-while (!FullStraight) {
-    attempts++;
+    const d1 = Math.ceil(Math.random() * 6);
+    const d2 = Math.ceil(Math.random() * 6);
+    const d3 = Math.ceil(Math.random() * 6);
+    const d4 = Math.ceil(Math.random() * 6);
+    const d5 = Math.ceil(Math.random() * 6);
+    const d6 = Math.ceil(Math.random() * 6);
 
-    let number10 = Math.floor(Math.random() * 6) + 1;
-    let number11 = Math.floor(Math.random() * 6) + 1;
-    let number12 = Math.floor(Math.random() * 6) + 1;
-    let number13 = Math.floor(Math.random() * 6) + 1;
-    let number14 = Math.floor(Math.random() * 6) + 1;
-    let number15 = Math.floor(Math.random() * 6) + 1;
+    let diceThrow = d1 + "," + d2 + "," + d3 + "," + d4 + "," + d5 + "," + d6 + ",";
+    printOut("Dice throw: " + diceThrow);
 
-    let diceRolls = [number10, number11, number12, number13, number14, number15];
+    const count1 = (diceThrow.match(/1/g) || []).length;
+    const count2 = (diceThrow.match(/2/g) || []).length;
+    const count3 = (diceThrow.match(/3/g) || []).length;
+    const count4 = (diceThrow.match(/4/g) || []).length;
+    const count5 = (diceThrow.match(/5/g) || []).length;
+    const count6 = (diceThrow.match(/6/g) || []).length;
 
-    diceRolls.sort();
+    printOut("Count: 1=" + count1 + " 2=" + count2 + " 3=" + count3 + " 4=" + count4 + " 5=" + count5 + " 6=" + count6);
 
-    if (diceRolls.toString() === "1,2,3,4,5,6") {
-        FullStraight = true;
+    if (!fullStraight && diceThrow === "1,2,3,4,5,6,") {
+        console.log("Full straight found after " + throwCount + " throws!");
+        fullStraight = true;
+    }
+
+    if (!threePairs && count1 === 2 && count2 === 2 && count3 === 2) {
+        console.log("Three pairs found after " + throwCount + " throws!");
+        threePairs = true;
+    }
+
+    if (!tower && ((count1 === 2 && count2 === 4) || (count1 === 4 && count2 === 2))) {
+        console.log("Tower (2 and 4 of a kind) found after " + throwCount + " throws!");
+        tower = true;
+    }
+
+    if (!yahtzee && (count1 === 6 || count2 === 6 || count3 === 6 || count4 === 6 || count5 === 6 || count6 === 6)) {
+        console.log("Yahtzee found after " + throwCount + " throws!");
+        yahtzee = true;
     }
 }
-printOut("Det tok " + attempts + " forsøk for å få full straight(1, 2, 3, 4, 5, 6)!");
 
 printOut(newLine);
-let attemptsPair = 0;
-let threePair = false;
-
-while (!threePair) {
-    attemptsPair++;
-
-    let number16 = Math.floor(Math.random() * 6) + 1;
-    let number17 = Math.floor(Math.random() * 6) + 1;
-    let number18 = Math.floor(Math.random() * 6) + 1;
-    let number19 = Math.floor(Math.random() * 6) + 1;
-    let number20 = Math.floor(Math.random() * 6) + 1;
-    let number21 = Math.floor(Math.random() * 6) + 1;
-
-    let diceRolls = [number16, number17, number18, number19, number20, number21];
-    
-    let counts = {};
-    for (let i = 0; i < diceRolls.length; i++) {
-        let value = diceRolls[i];
-        counts[value] = (counts[value] || 0) + 1;
-    }
-
-    let pairs = 0;
-    for (let key in counts) {
-        if (counts[key] === 2) {
-            pairs++;
-        }
-    }
-
-    if (pairs === 3) {
-        threePair = true;
-    }
-}
-
-printOut("Det tok " + attemptsPair + " forsøk for å få tre par!");
-
-printOut(newLine);
-let attemptsTower = 0;
-let Tower = false;
-
-while (!Tower) {
-    attemptsTower++;
-
-    let number22 = Math.floor(Math.random() * 6) + 1;
-    let number23 = Math.floor(Math.random() * 6) + 1;
-    let number24 = Math.floor(Math.random() * 6) + 1;
-    let number25 = Math.floor(Math.random() * 6) + 1;
-    let number26 = Math.floor(Math.random() * 6) + 1;
-    let number27 = Math.floor(Math.random() * 6) + 1;
-
-    let diceRolls = [number22, number23, number24, number25, number26, number27];
-    
-    let counts = {};
-    for (let i = 0; i < diceRolls.length; i++) {
-        let value = diceRolls[i];
-        counts[value] = (counts[value] || 0) + 1;
-    }
-
-    let twoOfAKind = false;
-    let fourOfAKind = false;
-    
-    for (let key in counts) {
-        if (counts[key] === 2) {
-            twoOfAKind = true;
-        }
-        if (counts[key] === 4) {
-            fourOfAKind = true;
-        }
-    }
-
-    if (twoOfAKind && fourOfAKind) {
-        Tower = true;
-    }
-}
-
-printOut("Det tok " + attemptsTower + " forsøk for å få 'tower' (2 og 4 like)!");
-
-printOut(newLine);
-let attemptsYahtzee = 0;
-let Yahtzee = false;
-
-while (!Yahtzee) {
-    attemptsYahtzee++;
-
-    let number1 = Math.floor(Math.random() * 6) + 1;
-    let number2 = Math.floor(Math.random() * 6) + 1;
-    let number3 = Math.floor(Math.random() * 6) + 1;
-    let number4 = Math.floor(Math.random() * 6) + 1;
-    let number5 = Math.floor(Math.random() * 6) + 1;
-    let number6 = Math.floor(Math.random() * 6) + 1;
-
-    if (number1 === number2 && number2 === number3 && number3 === number4 && number4 === number5 && number5 === number6) {
-        Yahtzee = true;
-    }
-}
-printOut("Det tok " + attemptsYahtzee + " forsøk for å få Yahtzee!");
-
-
-
-
-
 
