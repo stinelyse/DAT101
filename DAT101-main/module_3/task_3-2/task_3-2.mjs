@@ -56,13 +56,13 @@ printOut("--- Part 4 -----------------------------------------------------------
 for (let number3= 2; number3 < 200; number3++){
 let prime= true;
 
-let Divi= 2;
-while(Divi <= Math.sqrt(number3)){
-    if (number3 % Divi === 0) {
+let Division= 2;
+while(Division <= Math.sqrt(number3)){
+    if (number3 % Division === 0) {
         prime = false;
         break;
     }
-    Divi++;
+    Division++;
 }
 if (prime){
     printOut(number3.toString());
@@ -108,7 +108,7 @@ for (let i = 0; i < 5; i++) {
 printOut(newLine);
 
 printOut("--- Part 7 ----------------------------------------------------------------------------------------------");
-printOut("--- Part 7 ----------------------------------------------------------------------------------------------");
+
 let throwCount = 0;
 let fullStraight = false;
 let threePairs = false;
@@ -125,36 +125,48 @@ while (!fullStraight || !threePairs || !tower || !yahtzee) {
     const d5 = Math.ceil(Math.random() * 6);
     const d6 = Math.ceil(Math.random() * 6);
 
-    let diceThrow = d1 + "," + d2 + "," + d3 + "," + d4 + "," + d5 + "," + d6 + ",";
-    printOut("Dice throw: " + diceThrow);
+    let dice = [d1, d2, d3, d4, d5, d6];
+    let counts = [0, 0, 0, 0, 0, 0]; 
 
-    const count1 = (diceThrow.match(/1/g) || []).length;
-    const count2 = (diceThrow.match(/2/g) || []).length;
-    const count3 = (diceThrow.match(/3/g) || []).length;
-    const count4 = (diceThrow.match(/4/g) || []).length;
-    const count5 = (diceThrow.match(/5/g) || []).length;
-    const count6 = (diceThrow.match(/6/g) || []).length;
+    for (let i = 0; i < dice.length; i++) {
+        if (dice[i] === 1) counts[0]++;
+        if (dice[i] === 2) counts[1]++;
+        if (dice[i] === 3) counts[2]++;
+        if (dice[i] === 4) counts[3]++;
+        if (dice[i] === 5) counts[4]++;
+        if (dice[i] === 6) counts[5]++;
+    }
 
-    printOut("Count: 1=" + count1 + " 2=" + count2 + " 3=" + count3 + " 4=" + count4 + " 5=" + count5 + " 6=" + count6);
-
-    if (!fullStraight && diceThrow === "1,2,3,4,5,6,") {
-        console.log("Full straight found after " + throwCount + " throws!");
+    if (!fullStraight && counts[0] === 1 && counts[1] === 1 && counts[2] === 1 && counts[3] === 1 && counts[4] === 1 && counts[5] === 1) {
+        printOut("Full straight funnet etter " + throwCount + " kast!");
         fullStraight = true;
     }
 
-    if (!threePairs && count1 === 2 && count2 === 2 && count3 === 2) {
-        console.log("Three pairs found after " + throwCount + " throws!");
+    let pairs = 0;
+    for (let i = 0; i < counts.length; i++) {
+        if (counts[i] === 2) pairs++;
+    }
+    if (!threePairs && pairs === 3) {
+        printOut("Three pairs funnet etter " + throwCount + " kast!");
         threePairs = true;
     }
 
-    if (!tower && ((count1 === 2 && count2 === 4) || (count1 === 4 && count2 === 2))) {
-        console.log("Tower (2 and 4 of a kind) found after " + throwCount + " throws!");
+    let hasTwo = false;
+    let hasFour = false;
+    for (let i = 0; i < counts.length; i++) {
+        if (counts[i] === 2) hasTwo = true;
+        if (counts[i] === 4) hasFour = true;
+    }
+    if (!tower && hasTwo && hasFour) {
+        printOut("Tower funnet etter " + throwCount + " kast!");
         tower = true;
     }
 
-    if (!yahtzee && (count1 === 6 || count2 === 6 || count3 === 6 || count4 === 6 || count5 === 6 || count6 === 6)) {
-        console.log("Yahtzee found after " + throwCount + " throws!");
-        yahtzee = true;
+    for (let i = 0; i < counts.length; i++) {
+        if (counts[i] === 6) {
+            printOut("Yahtzee funnet etter " + throwCount + " kast!");
+            yahtzee = true;
+        }
     }
 }
 
