@@ -172,28 +172,30 @@ printOut(newLine);
 
 printOut("--- Part 8  ----------------------------------------------------------------------------------------------");
 
-function adjustString(text, maxSize, char, insertBefore) {
-    if (text.length >= maxSize) {
-        return text;
+function adjustText(text, maxSize, char, insertBefore) {
+    if (text.length < maxSize) {
+        const padding = char.repeat(maxSize - text.length);
+        text = insertBefore ? padding + text : text + padding;
     }
-
-    let difference = maxSize - text.length;
-    let extraChars = char.repeat(difference);
-
-
-    if (insertBefore) {
-        return extraChars + text;
-    } else {
-        return text + extraChars;
-    }
+    return text;
 }
 
-let result1 = adjustString("hello", 10, "*", true);
-let result2 = adjustString("world", 8, "-", false);
+// Parameters for the function
+let textExample = "This is a text";
+const maxSize = 20;
+const char = " ";
+let insertBefore = true;
 
-printOut("Result 1: " + result1); 
-printOut("Result 2: " + result2);  
-printOut(newLine);
+// Adjust text and print result with padding before
+printOut(adjustText(textExample, maxSize, char, insertBefore));
+
+// Adjust text and print result with padding after
+insertBefore = false;
+printOut(adjustText(textExample, maxSize, char, insertBefore));
+
+// End of the output
+let newLineOutput = "";  // Changed variable name to avoid conflict
+printOut(newLineOutput);
 
 
 printOut("--- Part 9 ----------------------------------------------------------------------------------------------");
