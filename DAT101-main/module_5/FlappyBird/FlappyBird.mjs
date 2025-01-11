@@ -32,8 +32,9 @@ export const GameProps = {
   soundMuted: false,
   dayTime: true,
   speed: 1,
-  background: null, 
-  ground: null
+  background: null,
+  ground: null,
+  hero: null
 };
 
 //--------------- Functions ----------------------------------------------//
@@ -55,8 +56,10 @@ function loadGame(){
   GameProps.background = new libSprite.TSprite(spcvs, SpriteInfoList.background, pos);
   pos.y = cvs.height - SpriteInfoList.ground.height;
   GameProps.ground = new libSprite.TSprite(spcvs, SpriteInfoList.ground, pos);
-  
-  
+  pos.x = 100;
+  pos.y = 100;
+  GameProps.hero = new libSprite.TSprite(spcvs, SpriteInfoList.hero1, pos);
+  GameProps.hero.animateSpeed = 10;
   requestAnimationFrame(drawGame);
   setInterval(animateGame, 10);
 }
@@ -65,14 +68,15 @@ function drawGame(){
   spcvs.clearCanvas();
   GameProps.background.draw();
   GameProps.ground.draw();
+  GameProps.hero.draw();
   requestAnimationFrame(drawGame);
 }
 
 function animateGame(){
-GameProps.ground.translate( - GameProps.speed, 0);
-if(GameProps.ground.posX <= -SpriteInfoList.background.width){
-  GameProps.ground.posX = 0;
-}
+  GameProps.ground.translate(-GameProps.speed, 0);
+  if(GameProps.ground.posX <= -SpriteInfoList.background.width){
+    GameProps.ground.posX = 0;
+  }
 
 }
 
