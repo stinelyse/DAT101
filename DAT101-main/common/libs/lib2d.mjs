@@ -1,9 +1,11 @@
-"use strict";
+"use strict"; //aktiverer strict mode- gjør språket mindre tilgivende, reduserer feil
 /**
  * @library lib2d
  * @description A library for classes that manage 2D graphics.
  */
 
+//En klasse er en mal for objekter, TPoint er en klasse som representerer et punkt i 2D (x,y). Brukes for å gjenbruke kode og organisere kode.
+//Klassen har to egenskaper x og y, og en konstruktør som tar inn to parametere aX og aY.
 class TPoint {
   x = 0;
   y = 0;
@@ -13,6 +15,10 @@ class TPoint {
   }
 } // End of TPoint class
 
+//TPosition er en klasse som representerer en posisjon i 2D, den arver fra TPoint klassen, men kan også ha sine egne funkjsoner og egenskaper.
+//Klassen har en konstruktør som tar inn to parametere aX og aY, og kaller på konstruktøren til TPoint med disse parameterne.
+//super() brukes for å kalle på konstruktøren til TPoint for å sette x og y.
+//Klassen har også en metode clone som lager en kopi av objektet, og en metode distanceToPoint som regner ut avstanden til et annet punkt.
 class TPosition extends TPoint {
   constructor(aX, aY) {
     super(aX, aY);
@@ -29,6 +35,12 @@ class TPosition extends TPoint {
   }
 } // End of TPosition class
 
+
+//TRectangle er en klasse som representerer et rektangel i 2D, den arver fra TPosition.
+//Klassen har en konstruktør som tar inn fire parametere aX, aY, aWidth og aHeight, og kaller på konstruktøren til TPosition med aX og aY.
+//Klassen har også egenskapene width og height, og egenskapene left, right, top og bottom som regner ut posisjonen til sidene av rektangelet.
+//Klassen har også metodene isInsideRect og isPositionInside som sjekker om et punkt er inni rektangelet.
+//Klassen har også egenskapen center som regner ut midtpunktet til rektangelet, og setter midtpunktet til rektangelet.
 class TRectangle extends TPosition {
   constructor(aX, aY, aWidth, aHeight) {
     super(aX, aY);
@@ -80,6 +92,10 @@ class TRectangle extends TPosition {
 
 const RAD = Math.PI / 180;
 
+
+//En klasse som lager en sinuskurve. Har egenskapene amplitude, frequency og angle.
+//Vi bruker denne klassen til å lage en sinuskurve som vi kan bruke til å lage en bølgeeffekt.
+//Privat egenskapene er markert med #, og kan ikke aksesseres utenfra klassen. Bruker det for å hindre utilsiktet endring av egenskaper.
 class TSineWave {
   #amplitude;
   #frequency;
@@ -97,6 +113,9 @@ class TSineWave {
   }
 } // end of TSineWave class
 
+
+
+//Eksporterer klassene slik at de kan brukes i andre filer.
 export default {
   /**
    * @class TPoint

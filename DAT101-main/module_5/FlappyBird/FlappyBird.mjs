@@ -14,6 +14,7 @@ const cvs = document.getElementById("cvs");
 const spcvs = new libSprite.TSpriteCanvas(cvs);
 
 // prettier-ignore
+//Et objekt som inneholder informasjon om sprites, som posisjon, bredde, høyde og antall.
 export const SpriteInfoList = {
   hero1:        { x:    0, y: 545, width:   34, height:  24, count:  4 },
   hero2:        { x:    0, y: 569, width:   34, height:  24, count:  4 },
@@ -51,6 +52,8 @@ export const GameProps = {
 
 //--------------- Functions ----------------------------------------------//
 
+//A function that plays a sound if the sound is not muted.
+//Kontrollerer lyden i spillet, hvis lyden er skrudd av, stoppes lyden.
 function playSound(aSound) {
   if (!GameProps.soundMuted) {
     aSound.play();
@@ -59,6 +62,8 @@ function playSound(aSound) {
   }
 }
 
+//A function that loads the game.
+//Klargjør alle elementer før spillet starter. 
 function loadGame() {
   console.log("Game ready to load");
   cvs.width = SpriteInfoList.background.width;
@@ -81,6 +86,8 @@ function loadGame() {
   setInterval(animateGame, 10);
 }// end of loadGame
 
+//A function that draws the game.
+//Rydder canvasen før hver ramme, tegner bakgrunnen, maten, hindringene, bakken, helten og menyen.
 function drawGame() {
   spcvs.clearCanvas();
   GameProps.background.draw();
@@ -92,6 +99,8 @@ function drawGame() {
   requestAnimationFrame(drawGame);
 }
 
+//A function that draws the obstacles.
+//Lagret i GameProps.obstacles.
 function drawObstacles() {
   for (let i = 0; i < GameProps.obstacles.length; i++) {
     const obstacle = GameProps.obstacles[i];
@@ -99,6 +108,8 @@ function drawObstacles() {
   }
 }
 
+//A function that draws the bait.
+//Lagret i GameProps.baits.
 function drawBait() {
   for (let i = 0; i < GameProps.baits.length; i++) {
     const bait = GameProps.baits[i];
@@ -106,27 +117,38 @@ function drawBait() {
   }
 }
 
+//A function that animates the game.
+//Spillet er i fire forskjellige tilstander: idle, getReady, playing og gameOver.
+//Hvis helten er død, stoppes animasjonen.
+//Hvis helten er i live, flyttes bakgrunnen, oppdateres helten og hindringene.
+//Hvis en hindring er passert, økes poengsummen.
+//Hvis en hindring er utenfor skjermen, fjernes den.
+//Hvis en matbit er spist, økes poengsummen.
+//Hvis en matbit er utenfor skjermen, fjernes den.
+//Hvis spillet er over, stoppes animasjonen.
+//Hvis spillet er i idle, oppdateres helten. (Idle: spillet står stille og venter på at spilleren skal starte)
+
 function animateGame() {
-  switch (GameProps.status) {
-    case EGameStatus.playing:
-      if (GameProps.hero.isDead) {
-        GameProps.hero.animateSpeed = 0;
-        GameProps.hero.update();
-        return;
+  switch (GameProps.status) {  
+    case EGameStatus.playing: 
+      if (GameProps.hero.isDead) { //If the hero is dead, stop the animation
+        GameProps.hero.animateSpeed = 0; //Stop the animation of the hero
+        GameProps.hero.update(); //Update the hero
+        return; 
       }
-      GameProps.ground.translate(-GameProps.speed, 0);
+      GameProps.ground.translate(-GameProps.speed, 0); //Move the ground to the left(noe som gir enn illusjon av at helten beveger seg fremover)
       if (GameProps.ground.posX <= -SpriteInfoList.background.width) {
         GameProps.ground.posX = 0;
       }
-      GameProps.hero.update();
+      GameProps.hero.update(); //Update the hero
       let delObstacleIndex = -1;
       
-      for (let i = 0; i < GameProps.obstacles.length; i++) {
+      for (let i = 0; i < GameProps.obstacles.length; i++) { //Loop through all obstacles
         const obstacle = GameProps.obstacles[i];
         obstacle.update();
         if(obstacle.right < GameProps.hero.left && !obstacle.hasPassed) {
           //Congratulations, you have passed the obstacle
-          GameProps.menu.incScore(20);
+          GameProps.menu.incScore(20); //Increase the score by 20 hvis hindringen er passert
           console.log("Score: " + GameProps.score);
           obstacle.hasPassed = true;
         }
@@ -137,8 +159,8 @@ function animateGame() {
       if (delObstacleIndex >= 0) {
         GameProps.obstacles.splice(delObstacleIndex, 1);
       }
-    case EGameStatus.gameOver:
-      let delBaitIndex = -1;
+    case EGameStatus.gameOver: //If the game is over, stop the animation
+      let delBaitIndex = -1; //If the bait is eaten, remove it
       const posHero = GameProps.hero.getCenter();
       for (let i = 0; i < GameProps.baits.length; i++) {
         const bait = GameProps.baits[i];
@@ -153,13 +175,14 @@ function animateGame() {
         GameProps.baits.splice(delBaitIndex, 1);
         GameProps.menu.incScore(10);
       }
-      break;
-      case EGameStatus.idle:
+      break; //Break betyr at vi avslutter switchen. Switch er en måte å sjekke hvilken tilstand spillet er i.
+      case EGameStatus.idle: //If the game is idle, update the hero
         GameProps.hero.updateIdle();
         break;
   }
 }
-
+//A function that spawns an obstacle.
+//Spawns a new obstacle in 2-7 seconds
 function spawnObstacle() {
   const obstacle = new TObstacle(spcvs, SpriteInfoList.obstacle);
   GameProps.obstacles.push(obstacle);
@@ -170,6 +193,8 @@ function spawnObstacle() {
   }
 }
 
+//A function that spawns a bait.
+//Spawns a new bait in 0.5-1.5 seconds
 function spawnBait() {
   const pos = new lib2d.TPosition(SpriteInfoList.background.width, 100);
   const bait = new TBait(spcvs, SpriteInfoList.food, pos);
@@ -181,6 +206,9 @@ function spawnBait() {
   }
 }
 
+//A function that starts the game.
+//Sets the status to playing, creates a new hero, resets the obstacles and baits, and plays the running sound.
+//Vi bruker export for å gjøre funksjonen tilgjengelig for andre filer.
 export function startGame() {
   GameProps.status = EGameStatus.playing;
   //The hero is dead, so we must create a new hero
@@ -197,6 +225,9 @@ export function startGame() {
 
 //--------------- Event Handlers -----------------------------------------//
 
+//A function that sets the sound on or off.
+//If the sound is muted, the sound is turned off.
+//If the sound is on, the sound is turned on.
 function setSoundOnOff() {
   if (chkMuteSound.checked) {
     GameProps.soundMuted = true;
@@ -207,6 +238,9 @@ function setSoundOnOff() {
   }
 } // end of setSoundOnOff
 
+//Set day or night
+//If day is checked, the game is set to day time.
+//If night is checked, the game is set to night time.
 function setDayNight() {
   if (rbDayNight[0].checked) {
     GameProps.dayTime = true;
@@ -217,6 +251,8 @@ function setDayNight() {
   }
 } // end of setDayNight
 
+//A function that handles the key down event.
+//If the space key is pressed, the hero flaps.
 function onKeyDown(aEvent) {
   switch (aEvent.code) {
     case "Space":
@@ -228,6 +264,7 @@ function onKeyDown(aEvent) {
 }
 
 //--------------- Main Code ----------------------------------------------//
+//Add event listeners
 chkMuteSound.addEventListener("change", setSoundOnOff);
 rbDayNight[0].addEventListener("change", setDayNight);
 rbDayNight[1].addEventListener("change", setDayNight);

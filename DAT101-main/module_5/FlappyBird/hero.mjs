@@ -3,11 +3,17 @@ import lib2d from "../../common/libs/lib2d.mjs";
 import libSprite from "../../common/libs/libSprite.mjs";
 import { GameProps, EGameStatus } from "./FlappyBird.mjs";
 
+//THero er en klasse for å håndtere helten i spillet, arver fra TSprite.
+//Klassen har egenskapene gravity, velocity, sineWave og spi.
+//Klassen har også konstruktøren som tar inn et canvas element, sprite informasjon og en posisjon.
+//Klassen har også metodene draw, update, flap og updateIdle.
+//Klassen har også egenskapene animateSpeed, isDead og rotation.
 class THero extends libSprite.TSprite {
-  #spi;
-  #gravity = 9.81 / 100;
-  #velocity = 0;
-  #sineWave;
+  //Bruker private for å hindre at egenskapene blir endret utenfor klassen. 
+  #spi; //informajon om fuglens sprite
+  #gravity = 9.81 / 100; //simulerer tyngdekraften
+  #velocity = 0; //Bestemmer om fuglen beveger seg opp eller ned
+  #sineWave; //Brukes til idle-animasjonen når spillet står stille
   constructor(aSpriteCanvas, aSpriteInfo, aPosition) {
     super(aSpriteCanvas, aSpriteInfo, aPosition);
     this.#spi = aSpriteInfo;
@@ -17,10 +23,12 @@ class THero extends libSprite.TSprite {
     this.#sineWave = new lib2d.TSineWave(1.5, 2);
   }
 
+  //draw er en metode for å tegne fuglen på canvasen.
   draw() {
     super.draw();
   }
 
+  //update er en metode for å oppdatere fuglen.
   update() {
     const groundY = GameProps.ground.posY;
     const bottomY = this.posY + this.#spi.height;
@@ -40,14 +48,16 @@ class THero extends libSprite.TSprite {
     }
   }
 
+  //flap er en metode for å få fuglen til å fly oppover.
   flap() {
-    this.#velocity = -3;
+    this.#velocity = -3; //-3 gir en oppoverbevegelse
   }
 
+  //updateIdle er en metode for å oppdatere idle-animasjon
   updateIdle(){
     this.translate(0, this.#sineWave.value);
   }
 
 }
 
-export default THero;
+export default THero; //Eksporterer THero

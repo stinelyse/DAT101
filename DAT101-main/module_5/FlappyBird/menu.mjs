@@ -9,20 +9,24 @@ Dere skal flytte FlappyBird Spriten til en fornuftig plass på skjermen.
 Lage en play knapp som kan starte spillet.
 */
 
+//Klassen TMenu håndterer menyen i spillet.
 export class TMenu {
-  #spFlappyBird;
-  #spButtonPlay;
-  #spNumber;
-  #spInfoText;
+  #spFlappyBird; //Fuglen
+  #spButtonPlay; //Knappen for å starte spillet
+  #spNumber; //Nedtelling
+  #spInfoText; //Tekst som vises på skjermen
   //Hint spGameOver, spMedal, spScore osv.
-  #spGameOver;
-  #spMedal;
-  #spcvs;
-  #activeSprite;
-  #posScore;
-  #posBestScore;
-  #posPlayScore;
-  #ranking = {first: 0, second: 0, third: 0};
+  #spGameOver; //Spillet er over
+  #spMedal; //Medalje
+  #spcvs; //Canvasen
+  #activeSprite; //Aktiv sprite
+  #posScore; //Posisjon for poengsum
+  #posBestScore;  //Posisjon for beste poengsum
+  #posPlayScore; //Posisjon for poengsum under spillet
+  #ranking = {first: 0, second: 0, third: 0}; //Plasseringene i spillet
+
+  //Konstruktøren tar inn en sprite canvas.
+  //Setter startstatus til idle. Plasserer sprites på skjermen. Legger til eventer for musen.
   constructor(aSpriteCanvas) {
     this.#spcvs = aSpriteCanvas;
     /* 
@@ -62,6 +66,7 @@ export class TMenu {
     this.#posPlayScore = new lib2d.TPosition(75, 50);
   }
 
+  //draw er en metode for å tegne menyen på canvasen.
   draw() {
     switch (GameProps.status) {
       case EGameStatus.idle:
@@ -88,6 +93,9 @@ export class TMenu {
     }
   } // end of draw
 
+  //incScore er en metode for å øke poengsummen i spillet.
+  //Sjekker om poengsummen er større enn første, andre eller tredje plass.
+  //Oppdaterer poengsummen og medaljen.
   incScore(aScore){
     GameProps.score += aScore;
     if(GameProps.score > this.#ranking.first){ //Første plass
@@ -108,13 +116,22 @@ export class TMenu {
     }
   }
 
+  //reset er en metode for å nullstille poengsummen og nedtellingen.
   reset(){
     GameProps.score = 0;
     this.#spNumber.index = 3;
     this.#spInfoText.index = 0;
   }
 
+
   //Ikke eksamensrelevant kode, men viktig for eventer i canvas
+  //onMouseMove er en metode for å håndtere musebevegelser.
+  //Sjekker om musen er over knappen for å starte spillet.
+  //Endrer musepekeren og setter aktiv sprite.
+  //onClick er en metode for å håndtere museklikk.
+  //Starter spillet hvis knappen for å starte spillet er aktiv.
+  //onCountDown er en metode for å håndtere nedtellingen før spillet starter.
+  //Teller ned fra 3 til 1 før spillet starter.
   #onMouseMove = (aEvent) => {
     const pos = this.#spcvs.getMousePos(aEvent);
     const boundRect = this.#spButtonPlay.boundingBox;

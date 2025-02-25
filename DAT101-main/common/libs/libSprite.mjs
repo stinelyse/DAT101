@@ -1,16 +1,20 @@
 "use strict";
-import lib2D from "./lib2d.mjs";
+import lib2D from "./lib2d.mjs"; //Importerer lib2D fra lib2d.mjs
 /**
  * @library libSprite
  * @description A library for classes that manage sprite animations.
  */
 
+//En klasse for å håndtere canvas for sprites, har metoder for å laste sprite sheets, tegne sprites og rydde canvasen.
+//Konstruktøren tar inn et canvas element, og lager et bilde element og en boundingRect for canvasen.
+//Klassen har også en metode for å laste sprite sheets, en metode for å tegne sprites, en metode for å tegne tekst, en metode for å rydde canvasen, en metode for å legge til en eventlistener, en metode for å finne musens posisjon og en egenskap for å hente stilen til canvasen.
 class TSpriteCanvas {
   #cvs;
   #ctx;
   #img;
   #boundingRect;
 
+  //constructor er en metode som kalles når et objekt av klassen blir laget.
   constructor(aCanvas) {
     this.#cvs = aCanvas;
     this.#ctx = aCanvas.getContext("2d");
@@ -19,11 +23,14 @@ class TSpriteCanvas {
     this.mousePos = new lib2D.TPosition(0, 0);
   }
 
+  //loadSpriteSheet er en metode for å laste sprite sheets, tar inn filnavn og en callback funksjon som kalles når bildet er ferdig lastet.
   loadSpriteSheet(aFileName, aLoadedFinal) {
     this.#img.onload = aLoadedFinal;
     this.#img.src = aFileName;
   }
 
+  //drawSprite er en metode for å tegne sprites, tar inn sprite informasjon, x og y posisjon, indeks og rotasjon.
+  //Metoden regner ut x og y posisjon, bredde og høyde, og tegner bildet på canvasen.
   drawSprite(aSpriteInfo, aDx = 0, aDy = 0, aIndex = 0, aRot = 0) {
     let index = aIndex;
     const sx = aSpriteInfo.x + index * aSpriteInfo.width;
@@ -49,6 +56,8 @@ class TSpriteCanvas {
     }
   } // End of drawSprite
 
+  //drawText er en metode for å tegne tekst, tar inn tekst og posisjon.
+  //gir mulighet til å vise poeng, instruksjoner eller annen informasjon i spillet.
   drawText(aText, aPos){
     this.#ctx.font = "25px Arial";
     this.#ctx.fillStyle = "#333333";
@@ -56,20 +65,24 @@ class TSpriteCanvas {
     this.#ctx.fillText(aText, aPos.x, aPos.y);
   }
 
+  //clearCanvas er en metode for å rydde canvasen. Forhindrer at gamle bilder blir liggende igjen når vi oppdaterer bildet.
   clearCanvas() {
     this.#ctx.clearRect(0, 0, this.#cvs.width, this.#cvs.height);
   }
 
+  //addEventListener er en metode for å legge til en eventlistener på canvasen.
   addEventListener(aType, aListener){
     this.#cvs.addEventListener(aType, aListener);
   }
 
+  //getMousePos er en metode for å finne musens posisjon, tar inn et event.
   getMousePos(aEvent){
     this.mousePos.x = aEvent.clientX - this.#boundingRect.left;
     this.mousePos.y = aEvent.clientY - this.#boundingRect.top;
     return this.mousePos;
   }
 
+  //get style er en egenskap for å hente stilen til canvasen.
   get style(){
     return this.#cvs.style;
   }
@@ -79,6 +92,9 @@ class TSpriteCanvas {
 /* 
  Utvid konstruktøren til å ta inn et punkt for destinasjon til sprite.
 */
+
+//Denne klassen representerer en enkelt sprite som kan bevege seg, animeres og sjekkes for kollisjoner. 
+//Konstruktøren tar inn et sprite canvas, sprite informasjon og en posisjon.
 
 class TSprite {
   #spcvs;
@@ -97,6 +113,7 @@ class TSprite {
     this.rotation = 0;
   }
 
+  //draw er en metode for å tegne sprite på canvasen.
   draw() {
     if (this.animateSpeed > 0) {
       this.#speedIndex += this.animateSpeed / 100;
@@ -111,6 +128,7 @@ class TSprite {
     this.#spcvs.drawSprite(this.#spi, this.#pos.x, this.#pos.y, this.#index, this.rotation);
   }
 
+  //Translate er en metode som flytter sprite til en ny posisjon ved å oppdatere koordinater. 
   translate(aDx, aDy) {
     this.#pos.x += aDx;
     this.#pos.y += aDy;
@@ -163,10 +181,12 @@ class TSprite {
     this.#index = aIndex;
   }
 
+  //hasCollided er en metode for å sjekke om en sprite har kollidert med en annen sprite.
   hasCollided(aSprite){
     return this.boundingBox.isInsideRect(aSprite.boundingBox);
   }
 
+  //getCenter er en metode for å hente midtpunktet til en sprite.
   getCenter(){
     return this.boundingBox.center;
   }
