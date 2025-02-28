@@ -435,12 +435,14 @@ class TSpriteDraggable extends TSpriteButton {
   #offset;
   #startDragPos;
   #canDrop;
+  #dropPos;
   constructor(aSpriteCanvas, aSpriteInfo, aPosition, aShapeClass) {
     super(aSpriteCanvas, aSpriteInfo, aPosition, aShapeClass);
     this.#offset = null; //Not dragging
     this.canDrag = true;
     this.#canDrop = true;
     this.snapTo = null;
+    this.#dropPos = null;
   }
 
   get isDragging() {
@@ -471,9 +473,12 @@ class TSpriteDraggable extends TSpriteButton {
       //Reset position to start drag position
       this.x = this.#startDragPos.x;
       this.y = this.#startDragPos.y;
+      if(this.onCancelDrop){
+        this.onCancelDrop();
+      }
     }else{
       if(this.onDrop){
-        this.onDrop();
+        this.onDrop(this.#dropPos);
       }
     }
     this.#offset = null;
@@ -497,6 +502,7 @@ class TSpriteDraggable extends TSpriteButton {
           this.x = aPosition.x;
           this.y = aPosition.y;
           this.#canDrop = true;
+          this.#dropPos = aPosition;
           return false; //Break the loop
         }
         return true; //Continue the loop
