@@ -7,6 +7,7 @@ import lib2D from "../../common/libs/lib2d_v2.mjs";
 import libSprite from "../../common/libs/libSprite_v2.mjs";
 import { TColorPicker } from "./ColorPicker.mjs";
 import MastermindBoard from "./MastermindBoard.mjs";
+import { TMenu } from "./menu.mjs";
 
 //--------------------------------------------------------------------------------------------------------------------
 //------ Variables, Constants and Objects
@@ -29,10 +30,6 @@ const spcvs = new libSprite.TSpriteCanvas(cvs);
 //Add all you game objects here
 export const GameProps = {
  Board: null, //tegner brettet
- ButtonNewGame: null,
- ButtonCheckAnswer: null,
- ButtonCheat: null,
- PanelHideAnswer: null,
  ColorPickers: null,
  snapTo: {
   positions: MastermindBoard.ColorAnswer.Row1,
@@ -41,6 +38,7 @@ export const GameProps = {
  ColorHint: null,
  computerAnswers: [],
  roundIndicator: null,
+ Menu: null
 }
 
 GameProps.ColorPickers = [ //importerer alle fargene på colorpicker
@@ -68,17 +66,7 @@ function drawGame(){
   spcvs.clearCanvas();
   //Draw all game objects here, remember to think about the draw order (layers in PhotoShop for example!)
   GameProps.Board.draw(); //tegner brettet
-  GameProps.ButtonNewGame.draw();
-  GameProps.ButtonCheckAnswer.draw(); 
-  GameProps.ButtonCheat.draw();
-  //GameProps.PanelHideAnswer.draw();
   GameProps.ColorHint.draw();
-
-  //tegner fargene på colorpicker, bruker for-løkke for å tegne alle fargene fordi det er flere farger og det er lettere å bruke en for-løkke istedenfor å skrive hver enkelt farge.
-  for (let i = 0; i < GameProps.ColorPickers.length; i++) { 
-    const ColorPicker = GameProps.ColorPickers[i];
-    ColorPicker.draw();
-  }
 
   for (let i = 0; i < GameProps.computerAnswers.length; i++) {
     const computerAnswer = GameProps.computerAnswers[i];
@@ -86,9 +74,18 @@ function drawGame(){
   }
 
   GameProps.roundIndicator.draw();
+
+  GameProps.Menu.draw();
+
+  //tegner fargene på colorpicker, bruker for-løkke for å tegne alle fargene fordi det er flere farger og det er lettere å bruke en for-løkke istedenfor å skrive hver enkelt farge.
+  for (let i = 0; i < GameProps.ColorPickers.length; i++) { 
+    const ColorPicker = GameProps.ColorPickers[i];
+    ColorPicker.draw();
+  }
   
   requestAnimationFrame(drawGame);
 }
+
 
 
  function generateComputerAnswer(){
@@ -101,12 +98,13 @@ for (let i = 0; i < 4; i++) {
 }
   }
 
-function moveRoundIndicator(){
-  const pos = GameProps.snapTo.positions[0];
-  pos.x -= 83;
-  pos.y += 7;
-  GameProps.roundIndicator.x = pos.x;
- }
+  
+  function moveRoundIndicator(){
+    const pos = GameProps.snapTo.positions[0];
+    GameProps.roundIndicator.x = pos.x - 84;
+    GameProps.roundIndicator.y = pos.y + 7;
+  }
+  
 
  
 
@@ -123,16 +121,14 @@ function loadGame() {
   spcvs.updateBoundsRect();
   let pos = new lib2D.TPoint(0, 0);
   GameProps.Board = new libSprite.TSprite(spcvs, SpriteInfoList.Board, new lib2D.TPoint(0, 0)); //tegner brettet //Tspritebutton endrer musen til en hånd som peker
-  GameProps.ButtonNewGame = new libSprite.TSpriteButton(spcvs, SpriteInfoList.ButtonNewGame, new lib2D.TPoint(275, 5));
-  GameProps.ButtonCheckAnswer = new libSprite.TSpriteButton(spcvs, SpriteInfoList.ButtonCheckAnswer, new lib2D.TPoint(275, 53));
-  GameProps.ButtonCheat = new libSprite.TSpriteButton(spcvs, SpriteInfoList.ButtonCheat, new lib2D.TPoint(5, 45));
-  GameProps.PanelHideAnswer = new libSprite.TSpriteButton(spcvs, SpriteInfoList.PanelHideAnswer, new lib2D.TPoint(84, 45));
   GameProps.ColorHint = new libSprite.TSprite(spcvs, SpriteInfoList.ColorHint, new lib2D.TPoint(0, 0));
 
   pos = GameProps.snapTo.positions[0];
   GameProps.roundIndicator = new libSprite.TSprite(spcvs, SpriteInfoList.ColorHint, pos);
   GameProps.roundIndicator.index = 2;
   moveRoundIndicator();
+
+  GameProps.Menu = new TMenu(spcvs);
 
   newGame();
   requestAnimationFrame(drawGame); // Start the animation loop
