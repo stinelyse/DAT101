@@ -11,6 +11,7 @@ export class TColorPicker extends libSprite.TSpriteDraggable {
   #spi;
   #color;
   #snapPos;
+  #snapIndex;
   #hasMoved;
   constructor(spcvs, spriteInfo, color, index){ 
     super(spcvs, spriteInfo,Positions[color]); //super er en referanse til superklassen
@@ -20,6 +21,7 @@ export class TColorPicker extends libSprite.TSpriteDraggable {
     this.#spi = spriteInfo;
     this.#color = color;
     this.#snapPos = null;
+    this.#snapIndex = -1;
     this.#hasMoved = false;
   }
 
@@ -38,9 +40,14 @@ export class TColorPicker extends libSprite.TSpriteDraggable {
 
   onDrop(aDropPosition){ //metode som kjøres når en farge blir sluppet
     GameProps.ColorPickers.push(this.clone()); //legger til en kopi av fargen i ColorPickers
-   const index = GameProps.snapTo.positions.indexOf(aDropPosition); //finner index til posisjonen fargen ble sluppet på
-   this.#snapPos = GameProps.snapTo.positions.splice(index, 1)[0]; //fjerner posisjonen fra snapTo.positions og lagrer den i this.#snapPos
+   this.#snapIndex = GameProps.snapTo.positions.indexOf(aDropPosition); //finner index til posisjonen fargen ble sluppet på
+   this.#snapPos = new lib2D.TPoint();
+   this.#snapPos.x = GameProps.snapTo.positions[this.#snapIndex].x;
+   this.#snapPos.y = GameProps.snapTo.positions[this.#snapIndex].y;
+   GameProps.snapTo.positions[this.#snapIndex] = null;
    this.#hasMoved = true;
+   GameProps.playerAnswers[this.#snapIndex] = this;
+   console.log("Drop color on snap index", this.#snapIndex);
   }
 
   onMouseDown(){ //metode som kjøres når musen klikkes på en farge
@@ -49,8 +56,9 @@ export class TColorPicker extends libSprite.TSpriteDraggable {
     GameProps.ColorPickers.splice(index, 1); //fjerner fargen fra ColorPickers
     GameProps.ColorPickers.push(this); //legger fargen tilbake i ColorPickers
     if(this.#snapPos !== null){ //hvis this.#snapPos ikke er null
-      GameProps.snapTo.positions.push(this.#snapPos); //legger til this.#snapPos i snapTo.positions
+      GameProps.snapTo.positions[this.#snapIndex] = this.#snapPos;
       this.#snapPos = null; //setter this.#snapPos til null
+      GameProps.playerAnswers[this.#snapIndex] = null;
     }
   }
 

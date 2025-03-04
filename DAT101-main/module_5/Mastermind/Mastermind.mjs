@@ -35,10 +35,10 @@ export const GameProps = {
   positions: MastermindBoard.ColorAnswer.Row1,
   distance: 20
  },
- ColorHint: null,
  computerAnswers: [],
  roundIndicator: null,
- Menu: null
+ Menu: null, 
+ playerAnswers: [null, null, null, null],
 }
 
 GameProps.ColorPickers = [ //importerer alle fargene på colorpicker
@@ -66,7 +66,6 @@ function drawGame(){
   spcvs.clearCanvas();
   //Draw all game objects here, remember to think about the draw order (layers in PhotoShop for example!)
   GameProps.Board.draw(); //tegner brettet
-  GameProps.ColorHint.draw();
 
   for (let i = 0; i < GameProps.computerAnswers.length; i++) {
     const computerAnswer = GameProps.computerAnswers[i];
@@ -98,7 +97,7 @@ for (let i = 0; i < 4; i++) {
 }
   }
 
-  
+
   function moveRoundIndicator(){
     const pos = GameProps.snapTo.positions[0];
     GameProps.roundIndicator.x = pos.x - 84;
@@ -121,7 +120,6 @@ function loadGame() {
   spcvs.updateBoundsRect();
   let pos = new lib2D.TPoint(0, 0);
   GameProps.Board = new libSprite.TSprite(spcvs, SpriteInfoList.Board, new lib2D.TPoint(0, 0)); //tegner brettet //Tspritebutton endrer musen til en hånd som peker
-  GameProps.ColorHint = new libSprite.TSprite(spcvs, SpriteInfoList.ColorHint, new lib2D.TPoint(0, 0));
 
   pos = GameProps.snapTo.positions[0];
   GameProps.roundIndicator = new libSprite.TSprite(spcvs, SpriteInfoList.ColorHint, pos);
