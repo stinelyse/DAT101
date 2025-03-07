@@ -39,6 +39,7 @@ export const GameProps = {
  roundIndicator: null,
  Menu: null, 
  playerAnswers: [null, null, null, null],
+answerHintRow : MastermindBoard.AnswerHint.Row1,
 }
 
 GameProps.ColorPickers = [ //importerer alle fargene på colorpicker
@@ -98,7 +99,7 @@ for (let i = 0; i < 4; i++) {
   }
 
 
-  function moveRoundIndicator(){
+  export function moveRoundIndicator(){
     const pos = GameProps.snapTo.positions[0];
     GameProps.roundIndicator.x = pos.x - 84;
     GameProps.roundIndicator.y = pos.y + 7;
