@@ -1,7 +1,7 @@
 "use strict";
 import lib2D from "../../common/libs/lib2d_v2.mjs";
 import libSprite from "../../common/libs/libSprite_v2.mjs";
-import { GameProps, SpriteInfoList, moveRoundIndicator} from "./Mastermind.mjs";
+import { GameProps, SpriteInfoList, moveRoundIndicator, newGame} from "./Mastermind.mjs";
 import MastermindBoard from "./MastermindBoard.mjs";
 
 export class TMenu {
@@ -26,6 +26,7 @@ export class TMenu {
         
         this.#ButtonCheat.onClick = this.onHintClick;
         this.#ButtonCheckAnswer.onClick = this.onCheckAnswerClick;
+        this.#ButtonNewGame.onClick = this.onButtonNewGameClick;
         this.#ColorHints = [];
   } //end of constructor
 
@@ -73,6 +74,7 @@ export class TMenu {
      console.log("Player answer", playerAnswerList);
 
     let answerColorHintIndex = 0;
+    let numberOfCorrectColors = 0;
      for(let i = 0; i < 4; i++){
         const computerAnswer = computerAnswerList[i];
         const playerAnswer = playerAnswerList[i];
@@ -81,7 +83,15 @@ export class TMenu {
             console.log("index", i);
             answerColorHintIndex = this.#createColorHint(answerColorHintIndex, 1);
             computerAnswer.checkThis = playerAnswer.checkThis = false;
+            //Er alle riktig så er spillet over, og vi må vise fargene fra computeren
+            //Hint: vi må bruke en variabel som forteller om alle farger er riktig
+            numberOfCorrectColors++;
         }
+     }
+     if (numberOfCorrectColors ===4){
+      console.log("Gratulerer, du har vunnet!");
+      this.#PanelHideAnswer.visible = false;
+      return; 
      }
      //Sjekke om vi har valgt riktig farge på feil plass
      //ytre for løkke sjekker spillerens svar
@@ -106,6 +116,10 @@ export class TMenu {
      this.#setNextRound();
   } //end of onCheckAnswerClick
 
+  onButtonNewGameClick = () => {
+   newGame();
+  }
+
   //Privat metode, den bruker interne variabler og kan ikke kalles utenfra
      #createColorHint(posIndex, colorIndex){
       const pos = GameProps.answerHintRow[posIndex++];
@@ -118,6 +132,11 @@ export class TMenu {
 
   #setNextRound(){
    this.#roundNumber++;
+   if(this.#roundNumber > 10){
+      console.log("Du har tapt, prøv igjen!");
+      this.#PanelHideAnswer.visible= false;
+      return;
+   }
    const rowText = `Row${this.#roundNumber}`;
    GameProps.snapTo.positions = MastermindBoard.ColorAnswer[rowText];
    GameProps.answerHintRow = MastermindBoard.AnswerHint[rowText];

@@ -59,7 +59,25 @@ GameProps.ColorPickers = [ //importerer alle fargene på colorpicker
 //------ Functions
 //--------------------------------------------------------------------------------------------------------------------
 
-function newGame() {
+export function newGame() {
+  for (let i = 0; i < GameProps.ColorPickers.length; i++) {
+    const colorPicker = GameProps.ColorPickers[i];
+    spcvs.removeSpriteButton(colorPicker);
+    }
+    GameProps.ColorPickers= [
+      new TColorPicker(spcvs, SpriteInfoList.ColorPicker, "Black", 0),
+      new TColorPicker(spcvs, SpriteInfoList.ColorPicker, "Blue", 1), 
+      new TColorPicker(spcvs, SpriteInfoList.ColorPicker, "Brown", 2),
+      new TColorPicker(spcvs, SpriteInfoList.ColorPicker, "Green", 3),
+      new TColorPicker(spcvs, SpriteInfoList.ColorPicker, "Orange", 4),
+      new TColorPicker(spcvs, SpriteInfoList.ColorPicker, "Red", 5),
+      new TColorPicker(spcvs, SpriteInfoList.ColorPicker, "White", 6),
+      new TColorPicker(spcvs, SpriteInfoList.ColorPicker, "Yellow", 7),
+    ]
+      for (let i = 0; i < GameProps.ColorPickers.length; i++) {
+      const colorPicker = GameProps.ColorPickers[i];
+      colorPicker.draw();
+      }
   generateComputerAnswer();
 }
 
