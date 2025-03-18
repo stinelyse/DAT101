@@ -31,6 +31,7 @@ class TObstacle {
     this.hasPassed = false;
   }
 
+  
   //draw er en metode for å tegne hindringen på canvasen.
   draw(){
     this.#upper.draw();
@@ -67,3 +68,4 @@ class TObstacle {
 
 //Eksporterer TObstacle
 export default TObstacle;
+

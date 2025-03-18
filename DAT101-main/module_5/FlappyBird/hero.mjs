@@ -44,6 +44,8 @@ class THero extends libSprite.TSprite {
       this.posY = groundY - this.#spi.height;
       GameProps.status = EGameStatus.gameOver;
       this.animateSpeed = 0;
+      const gameOverSound = new Audio("./media/gameOver.mp3"); //spiller av lyd
+      gameOverSound.play();
       GameProps.sounds.running.stop();
     }
   }

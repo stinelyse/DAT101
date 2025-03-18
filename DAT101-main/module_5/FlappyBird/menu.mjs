@@ -153,15 +153,20 @@ export class TMenu {
       GameProps.status = EGameStatus.getReady;
       this.#spcvs.style.cursor = "default";
       setTimeout(this.#onCountDown, 1000);
+         // Lager et nytt objekt hver gang for å få avspilling ikke bare første men alle gangene. 
+         const countdownSound = new Audio("./media/countDown.mp3"); 
+         countdownSound.play();
     }
   };
+
 
   #onCountDown = () => {
     if (this.#spNumber.index > 1) {
       this.#spNumber.index--;
       setTimeout(this.#onCountDown, 1000);
     } else {
-      startGame();
+      startGame();      
     }
   };
 } // End of TMenu class
+

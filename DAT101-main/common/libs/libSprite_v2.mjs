@@ -29,11 +29,17 @@ class TSpriteCanvas {
     this.#cvs.addEventListener("mouseleave", this.#mouseLeave);
     this.#cvs.addEventListener("mousedown", this.#mouseDown);
     this.#cvs.addEventListener("mouseup", this.#mouseUp);
+    this.onMouseMove = null;
   }
 
   get canvas() {
     return this.#cvs;
   }
+
+  get context() {
+    return this.#ctx;
+  }
+  
 
   #mouseMove = (aEvent) => {
     const pos = this.getMousePos(aEvent);
@@ -84,6 +90,9 @@ class TSpriteCanvas {
         this.#sprites.splice(index, 1);
         this.#sprites.push(this.activeSprite);
       }
+    }
+    if(this.onMouseMove) {
+      this.onMouseMove(aEvent);
     }
   };
 
@@ -228,6 +237,7 @@ class TSprite {
     this.spcvs = aSpriteCanvas;
     this.spi = aSpriteInfo;
     //Create a shape object based on the shape class, or use default rectangle shape
+    if(!aPoint) aPoint = new lib2D.TPoint(0, 0);
     this.shape = aShapeClass ? new aShapeClass(aPoint, aSpriteInfo.width, aSpriteInfo.height) : new lib2D.TRectangle(aPoint, aSpriteInfo.width, aSpriteInfo.height, lib2D.EShapeType.Rectangle);
     this.#index = 0;
     this.animateSpeed = 0;
@@ -504,7 +514,7 @@ class TSpriteDraggable extends TSpriteButton {
     //Check if the sprite can snap to a position, then override the canDrop
     if (this.snapTo) {
       this.snapTo.positions.every((aPosition) => {
-        if(aPosition === null) return true; //continue the loop
+        if(aPosition === null) return true; //Continue the loop
         const distance = this.shape.distanceToPoint(aPosition);
         if (distance <= this.snapTo.distance) {
           this.x = aPosition.x;

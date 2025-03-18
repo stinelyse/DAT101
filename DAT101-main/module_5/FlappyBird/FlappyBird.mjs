@@ -81,10 +81,20 @@ function loadGame() {
 
   //Load sounds
   GameProps.sounds.running = new libSound.TSoundFile("./Media/running.mp3");
+  GameProps.sounds.countDown = new libSound.TSoundFile("./Media/countDown.mp3");
+  GameProps.sounds.food = new libSound.TSoundFile("./Media/food.mp3");
+  GameProps.sounds.flap = new libSound.TSoundFile("./Media/flap.mp3");
+  GameProps.sounds.heroIsDead = new libSound.TSoundFile("./Media/heroIsDead.mp3");
+  GameProps.sounds.gameOver = new libSound.TSoundFile("./Media/gameOver.mp3");
 
-  requestAnimationFrame(drawGame);
+
+
+  requestAnimationFrame(drawGame); 
   setInterval(animateGame, 10);
 }// end of loadGame
+
+
+
 
 //A function that draws the game.
 //Rydder canvasen før hver ramme, tegner bakgrunnen, maten, hindringene, bakken, helten og menyen.
@@ -128,14 +138,20 @@ function drawBait() {
 //Hvis spillet er over, stoppes animasjonen.
 //Hvis spillet er i idle, oppdateres helten. (Idle: spillet står stille og venter på at spilleren skal starte)
 
+let heroIsDeadSound = new Audio("./media/heroIsDead.mp3"); //laster ned lyd på forhånd 
+let foodSound = new Audio("./media/food.mp3");  
+
 function animateGame() {
   switch (GameProps.status) {  
     case EGameStatus.playing: 
       if (GameProps.hero.isDead) { //If the hero is dead, stop the animation
+         heroIsDeadSound.play();
         GameProps.hero.animateSpeed = 0; //Stop the animation of the hero
         GameProps.hero.update(); //Update the hero
         return; 
       }
+
+      
       GameProps.ground.translate(-GameProps.speed, 0); //Move the ground to the left(noe som gir enn illusjon av at helten beveger seg fremover)
       if (GameProps.ground.posX <= -SpriteInfoList.background.width) {
         GameProps.ground.posX = 0;
@@ -159,7 +175,7 @@ function animateGame() {
       if (delObstacleIndex >= 0) {
         GameProps.obstacles.splice(delObstacleIndex, 1);
       }
-    case EGameStatus.gameOver: //If the game is over, stop the animation
+    case EGameStatus.gameOver:
       let delBaitIndex = -1; //If the bait is eaten, remove it
       const posHero = GameProps.hero.getCenter();
       for (let i = 0; i < GameProps.baits.length; i++) {
@@ -174,6 +190,7 @@ function animateGame() {
       if (delBaitIndex >= 0) {
         GameProps.baits.splice(delBaitIndex, 1);
         GameProps.menu.incScore(10);
+         foodSound.play();
       }
       break; //Break betyr at vi avslutter switchen. Switch er en måte å sjekke hvilken tilstand spillet er i.
       case EGameStatus.idle: //If the game is idle, update the hero
@@ -241,15 +258,22 @@ function setSoundOnOff() {
 //Set day or night
 //If day is checked, the game is set to day time.
 //If night is checked, the game is set to night time.
+
 function setDayNight() {
   if (rbDayNight[0].checked) {
     GameProps.dayTime = true;
+    GameProps.background.index = 0; // bakgrunnen til dagmodus
+    GameProps.obstacles.index = 0; // hindringene til dagmodus
     console.log("Day time");
   } else {
     GameProps.dayTime = false;
+    GameProps.background.index = 1; // bakgrunnen til nattmodus
+    GameProps.obstacles.index = 1; // hindringene til nattmodus
+    }
     console.log("Night time");
   }
-} // end of setDayNight
+  // end of setDayNight
+
 
 //A function that handles the key down event.
 //If the space key is pressed, the hero flaps.
@@ -258,6 +282,8 @@ function onKeyDown(aEvent) {
     case "Space":
       if (!GameProps.hero.isDead) {
         GameProps.hero.flap();
+        const flapSound = new Audio("./media/flap.mp3"); //spiller av lyd
+         flapSound.play();
       }
       break;
   }
