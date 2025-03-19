@@ -261,16 +261,17 @@ function setSoundOnOff() {
 //If day is checked, the game is set to day time.
 //If night is checked, the game is set to night time.
 
+
 function setDayNight() {
   if (rbDayNight[0].checked) {
     GameProps.dayTime = true;
     GameProps.background.index = 0; // bakgrunnen til dagmodus
-    GameProps.obstacles.index = 0; // hindringene til dagmodus
+    GameProps.obstacles.spriteIndex = 1; // hindringene til dagmodus
     console.log("Day time");
   } else {
     GameProps.dayTime = false;
     GameProps.background.index = 1; // bakgrunnen til nattmodus
-    GameProps.obstacles.index = 1; // hindringene til nattmodus
+    GameProps.obstacles.spriteIndex = 1; // hindringene til nattmodus
     }
     console.log("Night time");
   }

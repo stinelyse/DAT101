@@ -13,13 +13,13 @@ class TObstacle {
   #upper; //Øvre del av hindringen
   #lower; //Nedre del av hindringen
   #spi; //Informasjon om hindringen
-  constructor(aSpriteCanvas, aSpriteInfo) { //Konstruktør som tar inn et canvas element og sprite informasjon
+  constructor(aSpriteCanvas, aSpriteInfo, spriteIndex) { //Konstruktør som tar inn et canvas element og sprite informasjon
     this.#spi = aSpriteInfo;
     const minTop = -320 + 25; 
     let top = Math.floor(Math.random() * minTop);
     let pos = new lib2d.TPosition(650, top);
     this.#upper = new libSprite.TSprite(aSpriteCanvas, aSpriteInfo, pos);
-    this.#upper.index = 3;
+    this.#upper.index = spriteIndex;
     const groundY = GameProps.ground.posY;
     top += this.#spi.height + 150;
     const gap = top - groundY - 25;
@@ -27,7 +27,7 @@ class TObstacle {
     top = Math.floor(Math.random() * gap) + groundY - 25;
     pos.y = top;
     this.#lower = new libSprite.TSprite(aSpriteCanvas, aSpriteInfo, pos);
-    this.#lower.index = 2;
+    this.#lower.index = spriteIndex;
     this.hasPassed = false;
   }
 
