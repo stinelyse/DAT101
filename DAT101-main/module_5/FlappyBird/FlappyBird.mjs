@@ -204,8 +204,10 @@ function animateGame() {
 //Spawns a new obstacle in 2-7 seconds
 function spawnObstacle() {
   const obstacle = new TObstacle(spcvs, SpriteInfoList.obstacle);
+  obstacle.updateIndex(); // Sett riktig sprite basert på dag/natt
   GameProps.obstacles.push(obstacle);
-  //Spawn a new obstacle in 2-7 seconds
+
+  // Spawn a new obstacle in 2-7 seconds
   if (GameProps.status === EGameStatus.playing) {
     const seconds = Math.ceil(Math.random() * 5) + 2;
     setTimeout(spawnObstacle, seconds * 1000);
@@ -264,18 +266,20 @@ function setSoundOnOff() {
 
 function setDayNight() {
   if (rbDayNight[0].checked) {
-    GameProps.dayTime = true;
-    GameProps.background.index = 0; // bakgrunnen til dagmodus
-    GameProps.obstacles.spriteIndex = 1; // hindringene til dagmodus
-    console.log("Day time");
+    GameProps.dayTime = true; // Sett til dagmodus
+    GameProps.background.index = 0; // Sett bakgrunnen til dagspriten
   } else {
-    GameProps.dayTime = false;
-    GameProps.background.index = 1; // bakgrunnen til nattmodus
-    GameProps.obstacles.spriteIndex = 1; // hindringene til nattmodus
-    }
-    console.log("Night time");
+    GameProps.dayTime = false; // Sett til nattmodus
+    GameProps.background.index = 1; // Sett bakgrunnen til nattspriten
   }
-  // end of setDayNight
+
+  // Oppdater alle hindringer
+  for (let obstacle of GameProps.obstacles) {
+    obstacle.updateIndex(); // Oppdater hindringene til riktig modus
+  }
+
+  console.log(GameProps.dayTime ? "Day mode activated" : "Night mode activated");
+}
 
 
 //A function that handles the key down event.

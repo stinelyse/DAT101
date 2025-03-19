@@ -13,13 +13,12 @@ class TObstacle {
   #upper; //Øvre del av hindringen
   #lower; //Nedre del av hindringen
   #spi; //Informasjon om hindringen
-  constructor(aSpriteCanvas, aSpriteInfo, spriteIndex) { //Konstruktør som tar inn et canvas element og sprite informasjon
+  constructor(aSpriteCanvas, aSpriteInfo) { //Konstruktør som tar inn et canvas element og sprite informasjon
     this.#spi = aSpriteInfo;
     const minTop = -320 + 25; 
     let top = Math.floor(Math.random() * minTop);
     let pos = new lib2d.TPosition(650, top);
     this.#upper = new libSprite.TSprite(aSpriteCanvas, aSpriteInfo, pos);
-    this.#upper.index = spriteIndex;
     const groundY = GameProps.ground.posY;
     top += this.#spi.height + 150;
     const gap = top - groundY - 25;
@@ -27,8 +26,21 @@ class TObstacle {
     top = Math.floor(Math.random() * gap) + groundY - 25;
     pos.y = top;
     this.#lower = new libSprite.TSprite(aSpriteCanvas, aSpriteInfo, pos);
-    this.#lower.index = spriteIndex;
+    this.updateIndex();
     this.hasPassed = false;
+
+  }
+
+   // Metode for å oppdatere index basert på dag/natt-modus
+   updateIndex() {
+    if (GameProps.dayTime) {
+      this.#upper.index = 2; // Sett øvre del til dagmodus
+      this.#lower.index = 3; // Sett nedre del til dagmodus
+    } else {
+      this.#upper.index = 0; // Sett øvre del til nattmodus
+      this.#lower.index = 1; // Sett nedre del til nattmodus
+    }
+    console.log("Obstacle index updated:", this.#upper.index, this.#lower.index); // Logg indeksene
   }
 
   
