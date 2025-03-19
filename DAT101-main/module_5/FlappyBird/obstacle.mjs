@@ -52,6 +52,7 @@ class TObstacle {
     }
   }
 
+
   //get metoder for å hente egenskapene til hindringen
   get right(){
     return this.#upper.right;

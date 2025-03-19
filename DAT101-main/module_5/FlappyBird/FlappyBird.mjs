@@ -50,6 +50,8 @@ export const GameProps = {
   sounds: {countDown: null, food: null, gameOver: null, dead: null, running: null},
 };
 
+
+
 //--------------- Functions ----------------------------------------------//
 
 //A function that plays a sound if the sound is not muted.
@@ -145,7 +147,7 @@ function animateGame() {
   switch (GameProps.status) {  
     case EGameStatus.playing: 
       if (GameProps.hero.isDead) { //If the hero is dead, stop the animation
-         heroIsDeadSound.play();
+         heroIsDeadSound.play(); //spiller av lyd 
         GameProps.hero.animateSpeed = 0; //Stop the animation of the hero
         GameProps.hero.update(); //Update the hero
         return; 
