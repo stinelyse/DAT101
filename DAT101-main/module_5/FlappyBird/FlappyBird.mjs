@@ -266,19 +266,16 @@ function setSoundOnOff() {
 
 function setDayNight() {
   if (rbDayNight[0].checked) {
-    GameProps.dayTime = true; // Sett til dagmodus
-    GameProps.background.index = 0; // Sett bakgrunnen til dagspriten
+    GameProps.dayTime = true; //dagmodus
+    GameProps.background.index = 0; // Sett bakgrunnen til dagsmodu
   } else {
-    GameProps.dayTime = false; // Sett til nattmodus
-    GameProps.background.index = 1; // Sett bakgrunnen til nattspriten
+    GameProps.dayTime = false; // nattmodus
+    GameProps.background.index = 1; // Sett bakgrunnen til nattmodus
   }
 
-  // Oppdater alle hindringer
-  for (let obstacle of GameProps.obstacles) {
-    obstacle.updateIndex(); // Oppdater hindringene til riktig modus
+  for (let obstacle of GameProps.obstacles) { // For hver hindring
+    obstacle.updateIndex(); // Oppdaterer index basert på dag/natt-modus
   }
-
-  console.log(GameProps.dayTime ? "Day mode activated" : "Night mode activated");
 }
 
 

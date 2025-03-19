@@ -18,29 +18,29 @@ class TObstacle {
     const minTop = -320 + 25; 
     let top = Math.floor(Math.random() * minTop);
     let pos = new lib2d.TPosition(650, top);
-    this.#upper = new libSprite.TSprite(aSpriteCanvas, aSpriteInfo, pos);
+    this.#upper = new libSprite.TSprite(aSpriteCanvas, aSpriteInfo, pos); 
     const groundY = GameProps.ground.posY;
     top += this.#spi.height + 150;
     const gap = top - groundY - 25;
-
     top = Math.floor(Math.random() * gap) + groundY - 25;
     pos.y = top;
     this.#lower = new libSprite.TSprite(aSpriteCanvas, aSpriteInfo, pos);
-    this.updateIndex();
+
+    this.updateIndex(); // Oppdaterer index basert på dag/natt-modus
+
     this.hasPassed = false;
 
   }
 
-   // Metode for å oppdatere index basert på dag/natt-modus
+   // Metode forå oppdatere index basert på dag/natt-modus
    updateIndex() {
     if (GameProps.dayTime) {
-      this.#upper.index = 2; // Sett øvre del til dagmodus
-      this.#lower.index = 3; // Sett nedre del til dagmodus
+      this.#upper.index = 3; // dagmodus
+      this.#lower.index = 2; // dagmodus
     } else {
-      this.#upper.index = 0; // Sett øvre del til nattmodus
-      this.#lower.index = 1; // Sett nedre del til nattmodus
+      this.#upper.index = 1; // nattmodus
+      this.#lower.index = 0; // nattmodus
     }
-    console.log("Obstacle index updated:", this.#upper.index, this.#lower.index); // Logg indeksene
   }
 
   
