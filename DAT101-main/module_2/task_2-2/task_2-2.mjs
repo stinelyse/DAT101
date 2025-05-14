@@ -111,3 +111,4 @@ let week10= Math.floor(total / 7);
 let days10= total % 7;
 printOut("In 131 days it is "+ week10 + " weeks and " + days10 + " days");
 printOut(newLine);
+
